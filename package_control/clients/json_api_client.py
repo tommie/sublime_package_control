@@ -8,8 +8,11 @@ except (ImportError):
     from urllib import urlencode
     from urlparse import urlparse
 
-from ..console_write import console_write
 from ..download_manager import grab, release
+from .. import logger
+
+
+log = logger.get(__name__)
 
 
 class JSONApiClient():
@@ -62,5 +65,5 @@ class JSONApiClient():
         try:
             return json.loads(repository_json.decode('utf-8'))
         except (ValueError):
-            console_write(u'Error parsing JSON from repository %s.' % url, True)
+            log.error(u'Error parsing JSON from repository %s.', url)
         return False

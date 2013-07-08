@@ -1,10 +1,13 @@
 import os
 import subprocess
 
-from ..console_write import console_write
 from ..cmd import create_cmd
 from .non_clean_exit_error import NonCleanExitError
 from .binary_not_found_error import BinaryNotFoundError
+from .. import logger
+
+
+log = logger.get(__name__)
 
 
 class CliDownloader(object):
@@ -58,8 +61,7 @@ class CliDownloader(object):
             NonCleanExitError when the executable exits with an error
         """
 
-        if self.settings.get('debug'):
-            console_write(u"Trying to execute command %s" % create_cmd(args), True)
+        log.debug(u"Trying to execute command %s", create_cmd(args))
 
         proc = subprocess.Popen(args, stdin=subprocess.PIPE,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)

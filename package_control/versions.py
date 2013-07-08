@@ -1,7 +1,10 @@
 import re
 
 from .semver import SemVer
-from .console_write import console_write
+from . import logger
+
+
+log = logger.get(__name__)
 
 
 def semver_compat(v):
@@ -73,5 +76,5 @@ def version_sort(sortable, **kwargs):
     try:
         return sorted(sortable, key=_version_sort_key, **kwargs)
     except (ValueError) as e:
-        console_write(u"Error sorting versions - %s" % e, True)
+        log.error(u"Error sorting versions - %s", e)
         return []
