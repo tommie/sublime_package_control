@@ -1,3 +1,4 @@
+import os
 import re
 
 import sublime
@@ -25,8 +26,8 @@ class AddChannelCommand(sublime_plugin.WindowCommand):
 
         input = input.strip()
 
-        if re.match('https?://', input, re.I) == None:
-            show_error(u"Unable to add the channel \"%s\" since it does not appear to be served via HTTP (http:// or https://)." % input)
+        if re.match('https?://', input, re.I) == None and not os.path.exists(input):
+            show_error(u"Unable to add the channel \"%s\" since it does not appear to be served via HTTP (http:// or https://) and is not a file path." % input)
             return
 
         settings = sublime.load_settings('Package Control.sublime-settings')
