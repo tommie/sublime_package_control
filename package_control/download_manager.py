@@ -41,8 +41,8 @@ _timer = None
 
 @contextmanager
 def downloader(url, settings):
+    manager = _grab(url, settings)
     try:
-        manager = _grab(url, settings)
         yield manager
 
     finally:
