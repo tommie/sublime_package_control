@@ -128,6 +128,11 @@ class UrlLibDownloader(CertProvider, DecodingDownloader, LimitingDownloader, Cac
                 encoding = http_file.headers.get('content-encoding')
                 result = self.decode_response(encoding, result)
 
+                # Do not cache file:// URLs and others that return None as
+                # the status code.
+                if http_file.getcode() is None:
+                    return result
+
                 return self.cache_result('get', url, http_file.getcode(),
                     http_file.headers, result)
 

@@ -58,7 +58,11 @@ def _grab(url, settings):
             _timer.cancel()
             _timer = None
 
-        hostname = urlparse(url).hostname.lower()
+        hostname = urlparse(url).hostname
+
+        if hostname:
+            hostname = hostname.lower()
+
         if hostname not in _managers:
             _managers[hostname] = []
 
@@ -78,7 +82,11 @@ def _release(url, manager):
 
     _lock.acquire()
     try:
-        hostname = urlparse(url).hostname.lower()
+        hostname = urlparse(url).hostname
+
+        if hostname:
+            hostname = hostname.lower()
+
         _managers[hostname].insert(0, manager)
 
         _in_use -= 1
@@ -151,6 +159,10 @@ class DownloadManager(object):
         :return:
             The string contents of the URL
         """
+
+        # Anything that is not a URL is expected to be a filesystem path
+        if not re.match('https?://', url, re.I):
+            url = 'file://' + url
 
         is_ssl = re.search('^https://', url) != None
 
